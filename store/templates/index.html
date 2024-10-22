@@ -6,7 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+    <img src="{{request.user.profile.profile_picture.url}}" alt="">
     <h1>Welcome {{request.user}}</h1>
     <a href="{%url 'signout'%}">Logout</a>
+    <a href="{%url 'profile-edit'%}">Profile</a>
 </body>
 </html>

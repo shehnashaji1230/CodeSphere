@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from store import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,5 @@ urlpatterns = [
     path('signin/',views.SignInView.as_view(),name='signin'),
     path('index/',views.IndexView.as_view(),name='index'),
     path('logout/',views.logout_view,name='signout'),
-]
+    path('profile/change',views.UserProfileEditView.as_view(),name='profile-edit'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
