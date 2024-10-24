@@ -27,4 +27,7 @@ urlpatterns = [
     path('index/',views.IndexView.as_view(),name='index'),
     path('logout/',views.logout_view,name='signout'),
     path('profile/change',views.UserProfileEditView.as_view(),name='profile-edit'),
+    path('project/add/',views.ProjectCreateView.as_view(),name='project-add'),
+    path('myworks/all',views.MyProjectsListView.as_view(),name='my-works'),
+    path('project/<int:pk>/change/',views.ProjectUpdateView.as_view(),name='project-update'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

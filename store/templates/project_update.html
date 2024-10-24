@@ -1,0 +1,11 @@
+{%extends 'base.html'%}
+
+{%block main_block%}
+
+<form action="" method="post" enctype="multipart/form-data" class="mx-auto w-3/4 border border-2 p-3">
+    {%csrf_token%}
+    {{form}}
+    <button type="submit" class="border p-3 border-gray-300">Update</button>
+</form>
+
+{%endblock%}

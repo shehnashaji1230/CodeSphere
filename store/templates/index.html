@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <img src="{{request.user.profile.profile_picture.url}}" alt="">
-    <h1>Welcome {{request.user}}</h1>
-    <a href="{%url 'signout'%}">Logout</a>
-    <a href="{%url 'profile-edit'%}">Profile</a>
-</body>
-</html>
+{%extends 'base.html'%}
+
+{%block main_block%}
+
+<h1>Welcome {{request.user}}</h1>
+
+{%endblock%}
