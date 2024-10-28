@@ -39,8 +39,11 @@ class SignInView(FormView):
                 return redirect("index")
         return render(request,self.template_name,{'form':form_instance})                            
 
-class IndexView(TemplateView):
+class IndexView(View):
     template_name='index.html'
+    def get(self,request,*args,**kwargs):
+        qs=Project.objects.all().exclude(developer=request.user)
+        return render(request,self.template_name,{'data':qs})
 
 def logout_view(request,*args,**kwargs):
     logout(request)
@@ -107,3 +110,11 @@ class ProjectUpdateView(View):
              return redirect('my-works')
          return render(request,self.template_name,{'form':form_instance})
     
+
+class ProjectDetailView(View):
+    template_name='project_detail.html'
+    def get(self,request,*args,**kwargs):
+
+        id=kwargs.get('pk')
+        qs=Project.objects.get(id=id)
+        return render(request,self.template_name,{'project':qs})

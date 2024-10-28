@@ -1,0 +1,39 @@
+{%extends 'base.html'%}
+{% load embed_video_tags %}
+
+{%block main_block%}
+
+
+<div class="w-1/4  mx-auto">
+<article class="relative overflow-hidden rounded-lg shadow transition hover:shadow-lg">
+    <!-- <img
+      alt=""
+      src="{{project.preview_image.url}}"
+      class="relative inset-0 h-50 w-50 object-cover"
+    /> -->
+    <div class=" object-cover">
+        {% video project.thumbnail '500x400' %}
+    </div>
+
+   
+  
+    <div class="relative bg-gradient-to-t from-gray-900/50 to-gray-900/25 pt-32 sm:pt-48 lg:pt-64">
+        <div>
+            {{project.developer.profile.profile_picture.url}}
+        </div>
+      <div class="p-4 sm:p-6">
+        <time datetime="2022-10-10" class="block text-xs text-white/90"> {{project.created_date|date}} </time>
+  
+        <a href="#">
+          <h3 class="mt-0.5 text-lg text-white">{{project.title}}</h3>
+        </a>
+  
+        <p class="mt-2 line-clamp-3 text-sm/relaxed text-white/95">
+         {{project.description}}
+        </p>
+      </div>
+    </div>
+  </article>
+</div>
+
+{%endblock%}

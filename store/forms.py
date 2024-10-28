@@ -22,3 +22,12 @@ class ProjectForm(forms.ModelForm):
         model=Project
         fields=["title","description","preview_image","price",
                 "files","tag_objects","thumbnail"]
+        widgets={
+            "title":forms.TextInput(attrs={'class':'w-full p-2 border border-3 border-solid border-black'}),
+            "description":forms.Textarea(attrs={'class':'w-full p-2 border border-3 border-solid border-black'}),
+            "preview_image":forms.FileInput(attrs={'class':'w-full'}),
+            "price":forms.TextInput(attrs={'class':'w-full p-2 border border-3 border-solid border-black'}),
+            "files":forms.FileInput(attrs={'class':'w-full'}),
+            "tag_objects":forms.SelectMultiple(attrs={'class':'w-full'}),
+            "thumbnail":forms.TextInput(attrs={'class':'w-full p-2 border border-3 border-solid border-black'})
+        }

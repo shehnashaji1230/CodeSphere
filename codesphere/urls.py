@@ -30,4 +30,5 @@ urlpatterns = [
     path('project/add/',views.ProjectCreateView.as_view(),name='project-add'),
     path('myworks/all',views.MyProjectsListView.as_view(),name='my-works'),
     path('project/<int:pk>/change/',views.ProjectUpdateView.as_view(),name='project-update'),
+    path('project/<int:pk>/',views.ProjectDetailView.as_view(),name='project-detail'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
