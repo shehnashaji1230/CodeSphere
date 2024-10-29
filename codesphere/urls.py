@@ -31,4 +31,6 @@ urlpatterns = [
     path('myworks/all',views.MyProjectsListView.as_view(),name='my-works'),
     path('project/<int:pk>/change/',views.ProjectUpdateView.as_view(),name='project-update'),
     path('project/<int:pk>/',views.ProjectDetailView.as_view(),name='project-detail'),
+    path('project/<int:pk>/add-to-wishlist',views.AddToWishListView.as_view(),name='wishlist'),
+    path('project/wishlist',views.MyWishListItemListView.as_view(),name='my-wishlist')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

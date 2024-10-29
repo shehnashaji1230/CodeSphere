@@ -1,9 +1,10 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 from store.forms import SignUpForm,SignInForm,UserProfileForm,ProjectForm
 from django.views.generic import View,FormView,CreateView,TemplateView
 from django.contrib.auth import authenticate,login,logout
 from store.models import UserProfile,Project
+from django.contrib import messages
 
 # Create your views here.
 
@@ -118,3 +119,25 @@ class ProjectDetailView(View):
         id=kwargs.get('pk')
         qs=Project.objects.get(id=id)
         return render(request,self.template_name,{'project':qs})
+
+class AddToWishListView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get('pk')
+        project_object=get_object_or_404(Project,id=id)
+        try:
+            request.user.basket.basket_item.create(project_object=project_object)
+            print('item added')
+            messages.success(request,'added successfully')
+        except Exception as e:
+             messages.error(request,'failed to add')
+        return redirect('index')
+
+class MyWishListItemListView(View):
+    template_name='mywishlist.html'
+    def get(self,request,*args,**kwargs):
+        
+        qs=request.user.basket.basket_item.filter(is_order_placed=False)
+           
+        
+           
+        return render(request,self.template_name,{'data':qs})
