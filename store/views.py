@@ -3,8 +3,9 @@ from django.urls import reverse_lazy
 from store.forms import SignUpForm,SignInForm,UserProfileForm,ProjectForm
 from django.views.generic import View,FormView,CreateView,TemplateView
 from django.contrib.auth import authenticate,login,logout
-from store.models import UserProfile,Project
+from store.models import UserProfile,Project,WishListItem
 from django.contrib import messages
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -138,6 +139,13 @@ class MyWishListItemListView(View):
         
         qs=request.user.basket.basket_item.filter(is_order_placed=False)
            
-        
+        total=qs.values("project_object").aggregate(total=Sum("project_object__price")).get("total")
+        print("total:",total)
            
-        return render(request,self.template_name,{'data':qs})
+        return render(request,self.template_name,{'data':qs,"total":total})
+
+class WishListItemDeleteView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get('pk')
+        WishListItem.objects.get(id=id).delete()
+        return redirect('my-wishlist')
