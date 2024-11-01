@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from store.forms import SignUpForm,SignInForm,UserProfileForm,ProjectForm
 from django.views.generic import View,FormView,CreateView,TemplateView
 from django.contrib.auth import authenticate,login,logout
-from store.models import UserProfile,Project,WishListItem
+from store.models import UserProfile,Project,WishListItem,Order
 from django.contrib import messages
 from django.db.models import Sum
 
@@ -149,3 +149,27 @@ class WishListItemDeleteView(View):
         id=kwargs.get('pk')
         WishListItem.objects.get(id=id).delete()
         return redirect('my-wishlist')
+
+import razorpay
+class CheckOutView(View):
+    templatename='checkout.html'
+    def get(self,request,*args,**kwargs):
+        KEY_ID="rzp_test_Qeyj3CLL4v0F7y"
+        KEY_SECRET="FosHlGlzr3zNzIIG05LNZIGh"
+        client = razorpay.Client(auth=(KEY_ID, KEY_SECRET))
+
+        amount=request.user.basket.basket_item.filter(is_order_placed=False).values("project_object").aggregate(total=Sum("project_object__price")).get("total")
+        data = { "amount": amount*100, "currency": "INR", "receipt": "order_rcptid_11" }
+        payment = client.order.create(data=data)
+        order_id=payment.get("id")
+        order_object=Order.objects.create(order_id=order_id,customer=request.user)
+        wishlist_items=request.user.basket.basket_item.filter(is_order_placed=False)
+        for wi in wishlist_items:
+            order_object.wishlist_item_objects.add(wi)
+            wi.is_order_placed=True
+            wi.save()
+
+        # print(payment)
+        return render(request,self.templatename,{"key_id":KEY_ID,"amount":amount,"order_id":order_id})
+
+

@@ -70,8 +70,8 @@ class WishListItem(BaseModel):
 
     is_order_placed=models.BooleanField(default=False)
 
-    class Meta:
-        unique_together=("wishlist_object","project_object")
+    # class Meta:
+    #     unique_together=("wishlist_object","project_object","is_order_placed")
 # WishListItems.objects.filter(wishlist_object__owner=request.user,is_order_placed=False)
 class Order(BaseModel):
 
@@ -80,6 +80,7 @@ class Order(BaseModel):
     is_paid=models.BooleanField(default=False)
 
     order_id=models.CharField(max_length=200,null=True)
+    customer=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 
 
 def create_user_profile(sender,instance,created,**kwargs):

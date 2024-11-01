@@ -33,5 +33,6 @@ urlpatterns = [
     path('project/<int:pk>/',views.ProjectDetailView.as_view(),name='project-detail'),
     path('project/<int:pk>/add-to-wishlist',views.AddToWishListView.as_view(),name='wishlist'),
     path('project/wishlist',views.MyWishListItemListView.as_view(),name='my-wishlist'),
-    path('wishlist-item/<int:pk>/remove/',views.WishListItemDeleteView.as_view(),name='wishlist-delete')
+    path('wishlist-item/<int:pk>/remove/',views.WishListItemDeleteView.as_view(),name='wishlist-delete'),
+    path('checkout/',views.CheckOutView.as_view(),name='checkout'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
