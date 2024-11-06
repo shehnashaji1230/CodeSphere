@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <button id="rzp-button1">Pay</button>
+    
 
   {{key_id}}
   {{amount}}
@@ -23,7 +23,7 @@ var options = {
     "description": "Test Transaction",
     "image": "https://example.com/your_logo",
     "order_id": "{{order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+    "callback_url": "http://127.0.0.1:8000/payment/verify",
     "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
         "name": "Gaurav Kumar", //your customer's name
         "email": "gaurav.kumar@example.com",
@@ -37,9 +37,7 @@ var options = {
     }
 };
 var rzp1 = new Razorpay(options);
-document.getElementById('rzp-button1').onclick = function(e){
-    rzp1.open();
-    e.preventDefault();
-}
+rzp1.open();
+
 </script>
 </html>

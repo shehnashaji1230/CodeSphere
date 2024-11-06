@@ -7,10 +7,16 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model=User
         fields=["username","email","password1","password2"]
+        widgets={
+            "username":forms.TextInput(attrs={'class':'w-full border border-3'}),
+            "email":forms.EmailInput(attrs={'class':'w-full border border-3'}),
+            "password1":forms.PasswordInput(attrs={'class':'w-full border border-3'}),
+            "password2":forms.PasswordInput(attrs={'class':'w-full border border-3'}),
+        }
 
 class SignInForm(forms.Form):
-    username=forms.CharField()
-    password=forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    username=forms.CharField(widget=forms.TextInput(attrs={'class':'w-full border border-3'}))
+    password=forms.CharField(widget=forms.PasswordInput(attrs={'class':'w-full border border-3'}))
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

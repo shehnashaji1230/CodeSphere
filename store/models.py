@@ -54,6 +54,10 @@ class Project(BaseModel):
     tag_objects=models.ManyToManyField(Tag,null=True)
 
     thumbnail=EmbedVideoField()
+    @property
+    def downloads(self):
+
+        return WishListItem.objects.filter(project_object=self,is_order_placed=True).count()
 
 # WishList.objects.filter(owner=request.user)
 # request.user.basket

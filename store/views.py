@@ -6,8 +6,20 @@ from django.contrib.auth import authenticate,login,logout
 from store.models import UserProfile,Project,WishListItem,Order
 from django.contrib import messages
 from django.db.models import Sum
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.core.mail import send_mail
 
 # Create your views here.
+
+def send_email():
+    send_mail(
+    "Codehub project download",
+    "You have completed purchase of project",
+    "shehnashaji1230@gmail.com",
+    ["sr4sarath18@gmail.com"],
+    fail_silently=False,
+)
 
 class SignUpView(CreateView):
     template_name='register.html'
@@ -172,4 +184,29 @@ class CheckOutView(View):
         # print(payment)
         return render(request,self.templatename,{"key_id":KEY_ID,"amount":amount,"order_id":order_id})
 
+@method_decorator(csrf_exempt,name='dispatch')
+class PaymentVerificationView(View):
+    def post(self,request,*args,**kwargs):
+        
+        print(request.POST)
+        KEY_ID="rzp_test_Qeyj3CLL4v0F7y"
+        KEY_SECRET="FosHlGlzr3zNzIIG05LNZIGh"
 
+        client = razorpay.Client(auth=(KEY_ID, KEY_SECRET))
+        try:
+            client.utility.verify_payment_signature(request.POST)
+            order_id=request.POST.get('razorpay_order_id')
+            Order.objects.filter(order_id=order_id).update(is_paid=True)
+            send_email()
+            print('ok')
+        except:
+            print('failed')
+
+
+        return redirect('my-orders')
+
+class MyOrdersView(View):
+    template_name='myorders.html'
+    def get(self,request,*args,**kwargs):
+        qs=Order.objects.filter(customer=request.user)
+        return render(request,self.template_name,{'data':qs})

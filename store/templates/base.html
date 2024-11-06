@@ -98,9 +98,9 @@
                   </div>
       
                   <div class="p-2">
-                    <form method="POST" action="{%url 'signout'%}">
-                      <button
-                        type="submit"
+                    <form method="POST" action="">
+                      <a
+                        href="{%url 'signout'%}"
                         class="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50"
                         role="menuitem"
                       >
@@ -120,7 +120,7 @@
                         </svg>
       
                         Logout
-                      </button>
+                      </a>
                     </form>
                   </div>
                 </div>

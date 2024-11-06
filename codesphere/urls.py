@@ -35,4 +35,6 @@ urlpatterns = [
     path('project/wishlist',views.MyWishListItemListView.as_view(),name='my-wishlist'),
     path('wishlist-item/<int:pk>/remove/',views.WishListItemDeleteView.as_view(),name='wishlist-delete'),
     path('checkout/',views.CheckOutView.as_view(),name='checkout'),
+    path('payment/verify',views.PaymentVerificationView.as_view(),name='verify-payment'),
+    path('myorders/all',views.MyOrdersView.as_view(),name='my-orders')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
