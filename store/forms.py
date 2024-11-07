@@ -22,6 +22,11 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model=UserProfile
         fields=["bio","profile_picture","phone"]
+        widgets={
+            "bio":forms.TextInput(attrs={'class':'w-full border border-3 p-2'}),
+            "profile_picture":forms.FileInput(attrs={'class':'w-full'}),
+            "phone":forms.NumberInput(attrs={'class':'w-full border border-3 p-2'})
+        }
 
 class ProjectForm(forms.ModelForm):
     class Meta:

@@ -8,10 +8,12 @@ from django.contrib import messages
 from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from store.decorators import signin_required
+from django.views.decorators.cache import never_cache
 from django.core.mail import send_mail
 
 # Create your views here.
-
+decs=[signin_required,never_cache]
 def send_email():
     send_mail(
     "Codehub project download",
@@ -53,6 +55,7 @@ class SignInView(FormView):
                 return redirect("index")
         return render(request,self.template_name,{'form':form_instance})                            
 
+@method_decorator(decs,name='dispatch')
 class IndexView(View):
     template_name='index.html'
     def get(self,request,*args,**kwargs):
@@ -63,6 +66,7 @@ def logout_view(request,*args,**kwargs):
     logout(request)
     return redirect("signin")
 
+@method_decorator(decs,name='dispatch')
 class UserProfileEditView(View):
     template_name='profile_edit.html'
     form_class=UserProfileForm
@@ -82,6 +86,7 @@ class UserProfileEditView(View):
         else:
             return render(request,self.template_name,{'form':form_instance})
 
+@method_decorator(decs,name='dispatch')
 class ProjectCreateView(View):
     template_name='projectadd.html'
     form_class=ProjectForm
@@ -98,13 +103,14 @@ class ProjectCreateView(View):
             return redirect('index')
         return render(request,self.template_name,{'form':form_instance})
 
-
+@method_decorator(decs,name='dispatch')
 class MyProjectsListView(View):
     template_name='myprojects.html'
     def get(self,request,*args,**kwargs):
         qs=Project.objects.filter(developer=request.user)
         return render(request,self.template_name,{'data':qs})
 
+@method_decorator(decs,name='dispatch')
 class ProjectUpdateView(View):
     template_name='project_update.html'
     form_class=ProjectForm
@@ -124,7 +130,7 @@ class ProjectUpdateView(View):
              return redirect('my-works')
          return render(request,self.template_name,{'form':form_instance})
     
-
+@method_decorator(decs,name='dispatch')
 class ProjectDetailView(View):
     template_name='project_detail.html'
     def get(self,request,*args,**kwargs):
@@ -133,6 +139,7 @@ class ProjectDetailView(View):
         qs=Project.objects.get(id=id)
         return render(request,self.template_name,{'project':qs})
 
+@method_decorator(decs,name='dispatch')
 class AddToWishListView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get('pk')
@@ -145,6 +152,7 @@ class AddToWishListView(View):
              messages.error(request,'failed to add')
         return redirect('index')
 
+@method_decorator(decs,name='dispatch')
 class MyWishListItemListView(View):
     template_name='mywishlist.html'
     def get(self,request,*args,**kwargs):
@@ -156,13 +164,16 @@ class MyWishListItemListView(View):
            
         return render(request,self.template_name,{'data':qs,"total":total})
 
+@method_decorator(decs,name='dispatch')
 class WishListItemDeleteView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get('pk')
         WishListItem.objects.get(id=id).delete()
         return redirect('my-wishlist')
 
+
 import razorpay
+@method_decorator(decs,name='dispatch')
 class CheckOutView(View):
     templatename='checkout.html'
     def get(self,request,*args,**kwargs):
@@ -205,6 +216,7 @@ class PaymentVerificationView(View):
 
         return redirect('my-orders')
 
+@method_decorator(decs,name='dispatch')
 class MyOrdersView(View):
     template_name='myorders.html'
     def get(self,request,*args,**kwargs):

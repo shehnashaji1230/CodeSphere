@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
+{%extends 'base.html'%}
 
-        <img src="{{request.user.profile.profile_picture.url}}" alt="">
-        <form action="" method="post" enctype="multipart/form-data">
-            {%csrf_token%}
-            {{form}}
-            <button type="submit">Change</button>
-        </form>
-    </div>
-</body>
-</html>
+{%block main_block%}
+
+<div class="container">
+    <h1 class="text-center font-medium">My Profile</h1>
+    <img src="{{request.user.profile.profile_picture.url}}" alt="">
+    
+    <form action="" method="post" enctype="multipart/form-data" class="mx-auto w-3/4 border border-2 p-3">
+       
+        {%csrf_token%}
+        {{form}}
+        <button type="submit" class="border border-2 border-solid w-full border-gray-500 mt-4">Change</button>
+    </form>
+</div>
+{%endblock%}
