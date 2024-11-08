@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
-from store.forms import SignUpForm,SignInForm,UserProfileForm,ProjectForm
+from store.forms import SignUpForm,SignInForm,UserProfileForm,ProjectForm,PasswordResetForm
 from django.views.generic import View,FormView,CreateView,TemplateView
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import User
 from store.models import UserProfile,Project,WishListItem,Order
 from django.contrib import messages
 from django.db.models import Sum
@@ -173,12 +174,13 @@ class WishListItemDeleteView(View):
 
 
 import razorpay
+from decouple import config
 @method_decorator(decs,name='dispatch')
 class CheckOutView(View):
     templatename='checkout.html'
     def get(self,request,*args,**kwargs):
-        KEY_ID="rzp_test_Qeyj3CLL4v0F7y"
-        KEY_SECRET="FosHlGlzr3zNzIIG05LNZIGh"
+        KEY_ID=config('KEY_ID')
+        KEY_SECRET=config('KEY_SECRET')
         client = razorpay.Client(auth=(KEY_ID, KEY_SECRET))
 
         amount=request.user.basket.basket_item.filter(is_order_placed=False).values("project_object").aggregate(total=Sum("project_object__price")).get("total")
@@ -200,8 +202,8 @@ class PaymentVerificationView(View):
     def post(self,request,*args,**kwargs):
         
         print(request.POST)
-        KEY_ID="rzp_test_Qeyj3CLL4v0F7y"
-        KEY_SECRET="FosHlGlzr3zNzIIG05LNZIGh"
+        KEY_ID=config('KEY_ID')
+        KEY_SECRET=config('KEY_SECRET')
 
         client = razorpay.Client(auth=(KEY_ID, KEY_SECRET))
         try:
@@ -222,3 +224,30 @@ class MyOrdersView(View):
     def get(self,request,*args,**kwargs):
         qs=Order.objects.filter(customer=request.user)
         return render(request,self.template_name,{'data':qs})
+
+class PasswordResetView(View):
+    template_name='password_reset.html'
+    form_class=PasswordResetForm
+    def get(self,request,*args,**kwargs):
+        form_instance=self.form_class()
+        return render(request,self.template_name,{'form':form_instance})
+    def post(self,request,*args,**kwargs):
+        form_instance=self.form_class(request.POST)
+        if form_instance.is_valid():
+            username=form_instance.cleaned_data.get('username')
+            email=form_instance.cleaned_data.get('email')
+            pwd1=form_instance.cleaned_data.get('password1')
+            pwd2=form_instance.cleaned_data.get('password2')
+            print(username,email,pwd1,pwd2)
+
+            try:
+                assert pwd1==pwd2,"password mismatch"
+                user_object=User.objects.get(username=username,email=email)
+                user_object.set_password(pwd2)
+                user_object.save()
+                return redirect('signin')
+            except Exception as e:
+                messages.error(request,f"{e}")
+               
+        return render(request,self.template_name,{'form':form_instance})
+

@@ -42,3 +42,9 @@ class ProjectForm(forms.ModelForm):
             "tag_objects":forms.SelectMultiple(attrs={'class':'w-full'}),
             "thumbnail":forms.TextInput(attrs={'class':'w-full p-2 border border-3 border-solid border-black'})
         }
+
+class PasswordResetForm(forms.Form):
+    username=forms.CharField()
+    email=forms.EmailField()
+    password1=forms.CharField()
+    password2=forms.CharField()

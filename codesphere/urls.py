@@ -36,5 +36,6 @@ urlpatterns = [
     path('wishlist-item/<int:pk>/remove/',views.WishListItemDeleteView.as_view(),name='wishlist-delete'),
     path('checkout/',views.CheckOutView.as_view(),name='checkout'),
     path('payment/verify',views.PaymentVerificationView.as_view(),name='verify-payment'),
-    path('myorders/all',views.MyOrdersView.as_view(),name='my-orders')
+    path('myorders/all',views.MyOrdersView.as_view(),name='my-orders'),
+    path('password/reset',views.PasswordResetView.as_view(),name='password-reset'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
